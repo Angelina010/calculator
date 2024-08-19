@@ -20,3 +20,7 @@ button {
     height: 50px;
 }
 
+.operator, .equals {
+    background-color: rgb(191, 239, 255);
+}
+
