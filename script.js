@@ -1,3 +1,5 @@
+const DEFAULT_DISPLAY = 0;
+
 function add (num1, num2) {
     return num1 + num2;
 }
@@ -18,11 +20,11 @@ function operate (num1, num2, operator){
     switch (operator) {
         case '+':
             return add(num1, num2)
-        case '-':
+        case '−':
             return subtract(num1,num2)
-        case 'x':
+        case '×':
             return multiply(num1,num2)
-        case '/':
+        case '÷':
             return divide(num1, num2)
         default:
             return "Error: Invalid operator";
@@ -30,7 +32,7 @@ function operate (num1, num2, operator){
 }
 
 function updateDisplay(){
-    divDisplay.textContent = curDisplay;
+    mainDisplay.textContent = numBuilder;
 }
 
 function updateMemoryDisplay(){
@@ -43,7 +45,7 @@ function updateMemoryDisplay(){
     }
 
     if (num2 != null) {
-        memoryDisplayText += num2
+        memoryDisplayText += num2 + " "
     }
     memoryDisplay.textContent = memoryDisplayText;
 }
@@ -53,29 +55,27 @@ let num1 = null;
 let num2 = null;
 let operator = "";
 
-let curDisplay = "";
+let numBuilder = "";
 
 let isCalculated = false; //if true, num1 is the result of a previous calculation and not from user input
 
-const divDisplay = document.querySelector(".display");
+const mainDisplay = document.querySelector(".display");
 const memoryDisplay = document.querySelector(".memory")
 
 const digitBtns = document.querySelectorAll(".digit");
 digitBtns.forEach((digitBtn) => {
     digitBtn.addEventListener("click", (event) => {
-        if (isCalculated){
-            curDisplay = event.target.textContent;
-            num1 =Number(curDisplay);
+        if (isCalculated) {
+            numBuilder = event.target.textContent;
+            num1 = Number(numBuilder);
             isCalculated = false;
-        }
-        else if (operator === ""){
-            curDisplay += event.target.textContent;
-            num1 =Number(curDisplay);
-            isCalculated = false;
-        }
-        else{
-            curDisplay += event.target.textContent;
-            num2 =Number(curDisplay);
+        } else {
+            numBuilder += event.target.textContent;
+            if (operator === "") {
+                num1 = Number(numBuilder);
+            } else {
+                num2 = Number(numBuilder);
+            }
         }
         updateDisplay();
         updateMemoryDisplay();
@@ -87,14 +87,14 @@ const operatorBtns = document.querySelectorAll(".operator")
 operatorBtns.forEach((operatorBtn) => {
     operatorBtn.addEventListener("click", (event) => {
         if (num1 != null && num2 != null){
-            curDisplay = operate(num1, num2, operator)
-            num1 = curDisplay
+            numBuilder = operate(num1, num2, operator)
+            num1 = numBuilder
             num2 = null;
             updateDisplay();
         }
         operator = event.target.textContent;
         isCalculated = false;
-        curDisplay = ""; //reset the display for num2
+        numBuilder = ""; //reset the display for num2
         updateMemoryDisplay();
     }
 )
@@ -104,13 +104,76 @@ operatorBtns.forEach((operatorBtn) => {
 const equalsBtn = document.querySelector(".equals")
 equalsBtn.addEventListener("click", () => {
     if (num1 != null && num2 != null){
-        curDisplay = operate(num1, num2, operator);
-        num1 = Number(curDisplay);
+        numBuilder = String(operate(num1, num2, operator));
+        num1 = Number(numBuilder);
         num2 = null;
         operator = "";
         isCalculated = true;
         updateDisplay();
-        updateMemoryDisplay();
+        memoryDisplay.textContent += "="
     }
 })
+
+const allClearBtn = document.querySelector(".all-clear")
+allClearBtn.addEventListener("click", ()=> {
+    num1 = null;
+    num2 = null;
+    operator = "";
+    numBuilder = "";
+    isCalculated = false;
+    mainDisplay.textContent = DEFAULT_DISPLAY;
+    updateMemoryDisplay();
+})
+
+const clearEntryBtn = document.querySelector(".clear-entry")
+clearEntryBtn.addEventListener("click", ()=>{
+    numBuilder = numBuilder.slice(0, -1);
+
+    if (operator === ""){
+        num1 = numBuilder.length > 0? Number(numBuilder) : null
+    }
+    else if (num2 != null){
+        num2 = numBuilder.length > 0? Number(numBuilder) : null
+    }
+    else{
+        operator = "";
+    }
+
+    updateMemoryDisplay();
+    updateDisplay();
+    if (mainDisplay.textContent === ""){
+        mainDisplay.textContent = DEFAULT_DISPLAY;
+    }
+ } )
+
+ const signButton = document.querySelector(".sign");
+ let negative = false;
+ signButton.addEventListener("click", () => {
+    if (!negative){
+        numBuilder = "-" + numBuilder;
+        negative = true;
+    }
+    else{
+        numBuilder = numBuilder.substring(1, numBuilder.length);
+        negative = false;
+    }
+    if (num2 != null){
+        num2 = -num2;
+    }
+    else {
+        if (num1 != null){
+            num1 = -num1;
+        }
+    }
+    updateDisplay();
+    updateMemoryDisplay();
+    if (numBuilder === "-"){
+        mainDisplay.textContent = "-" + DEFAULT_DISPLAY;
+    }
+    else if (numBuilder === ""){
+        mainDisplay.textContent = DEFAULT_DISPLAY;
+    }
+ })
+
+
 
