@@ -33,6 +33,21 @@ function updateDisplay(){
     divDisplay.textContent = curDisplay;
 }
 
+function updateMemoryDisplay(){
+    let memoryDisplayText = ""
+    if (num1 != null) {
+        memoryDisplayText += num1 + " "
+    }
+    if (operator != "") {
+        memoryDisplayText += operator + " "
+    }
+
+    if (num2 != null) {
+        memoryDisplayText += num2
+    }
+    memoryDisplay.textContent = memoryDisplayText;
+}
+
 
 let num1 = null;
 let num2 = null;
@@ -43,6 +58,7 @@ let curDisplay = "";
 let isCalculated = false; //if true, num1 is the result of a previous calculation and not from user input
 
 const divDisplay = document.querySelector(".display");
+const memoryDisplay = document.querySelector(".memory")
 
 const digitBtns = document.querySelectorAll(".digit");
 digitBtns.forEach((digitBtn) => {
@@ -55,12 +71,14 @@ digitBtns.forEach((digitBtn) => {
         else if (operator === ""){
             curDisplay += event.target.textContent;
             num1 =Number(curDisplay);
+            isCalculated = false;
         }
         else{
-            curDisplay = event.target.textContent;
+            curDisplay += event.target.textContent;
             num2 =Number(curDisplay);
         }
         updateDisplay();
+        updateMemoryDisplay();
         
     });
 })
@@ -69,10 +87,15 @@ const operatorBtns = document.querySelectorAll(".operator")
 operatorBtns.forEach((operatorBtn) => {
     operatorBtn.addEventListener("click", (event) => {
         if (num1 != null && num2 != null){
-            num1 = operate(num1, num2, operator)
+            curDisplay = operate(num1, num2, operator)
+            num1 = curDisplay
+            num2 = null;
+            updateDisplay();
         }
         operator = event.target.textContent;
         isCalculated = false;
+        curDisplay = ""; //reset the display for num2
+        updateMemoryDisplay();
     }
 )
 })
@@ -80,11 +103,14 @@ operatorBtns.forEach((operatorBtn) => {
 
 const equalsBtn = document.querySelector(".equals")
 equalsBtn.addEventListener("click", () => {
-    curDisplay = operate(num1, num2, operator);
+    if (operator != ""){
+        curDisplay = operate(num1, num2, operator);
+    }
     num1 = Number(curDisplay);
     num2 = null;
     operator = "";
     isCalculated = true;
     updateDisplay();
+    updateMemoryDisplay();
 })
 
