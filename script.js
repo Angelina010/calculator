@@ -95,6 +95,7 @@ operatorBtns.forEach((operatorBtn) => {
         operator = event.target.textContent;
         isCalculated = false;
         numBuilder = ""; //reset the display for num2
+        negative = false; //reset the sign state for num2
         updateMemoryDisplay();
     }
 )
@@ -130,10 +131,20 @@ clearEntryBtn.addEventListener("click", ()=>{
     numBuilder = numBuilder.slice(0, -1);
 
     if (operator === ""){
-        num1 = numBuilder.length > 0? Number(numBuilder) : null
+        //if a number isCalculated, clicking the CE button removes the entire number instead of one digit at a time
+        if (numBuilder.length === 0 || isCalculated){
+            num1 = null
+        }
+        else{
+            num1 = Number(numBuilder);
+        }
+
+        if (isCalculated){
+            numBuilder = "";
+        }
     }
     else if (num2 != null){
-        num2 = numBuilder.length > 0? Number(numBuilder) : null
+        num2 = numBuilder.length > 0? Number(numBuilder) : null;
     }
     else{
         operator = "";
@@ -154,7 +165,7 @@ clearEntryBtn.addEventListener("click", ()=>{
         negative = true;
     }
     else{
-        numBuilder = numBuilder.substring(1, numBuilder.length);
+        numBuilder = numBuilder.substring(1, numBuilder.length); //removing the - sign
         negative = false;
     }
     if (num2 != null){
@@ -171,6 +182,7 @@ clearEntryBtn.addEventListener("click", ()=>{
         mainDisplay.textContent = "-" + DEFAULT_DISPLAY;
     }
     else if (numBuilder === ""){
+        console.log("print")
         mainDisplay.textContent = DEFAULT_DISPLAY;
     }
  })
