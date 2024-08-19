@@ -32,7 +32,14 @@ function operate (num1, num2, operator){
 }
 
 function updateDisplay(){
-    mainDisplay.textContent = numBuilder;
+    if (numBuilder.length < 10){
+        mainDisplay.textContent = numBuilder
+    }
+    else{
+        scientificNotation = Number(numBuilder).toExponential()
+        mainDisplay.textContent = scientificNotation.length < 10? scientificNotation : Number(scientificNotation).toPrecision(7)
+    }
+    
 }
 
 function updateMemoryDisplay(){
@@ -43,7 +50,6 @@ function updateMemoryDisplay(){
     if (operator != "") {
         memoryDisplayText += operator + " "
     }
-
     if (num2 != null) {
         memoryDisplayText += num2 + " "
     }
@@ -65,20 +71,23 @@ const memoryDisplay = document.querySelector(".memory")
 const digitBtns = document.querySelectorAll(".digit");
 digitBtns.forEach((digitBtn) => {
     digitBtn.addEventListener("click", (event) => {
-        if (isCalculated) {
-            numBuilder = event.target.textContent;
-            num1 = Number(numBuilder);
-            isCalculated = false;
-        } else {
-            numBuilder += event.target.textContent;
-            if (operator === "") {
+        if (numBuilder.length < 9){
+
+            if (isCalculated) {
+                numBuilder = event.target.textContent;
                 num1 = Number(numBuilder);
+                isCalculated = false;
             } else {
-                num2 = Number(numBuilder);
+                numBuilder += event.target.textContent;
+                if (operator === "") {
+                    num1 = Number(numBuilder);
+                } else {
+                    num2 = Number(numBuilder);
+                }
             }
+            updateDisplay();
+            updateMemoryDisplay();
         }
-        updateDisplay();
-        updateMemoryDisplay();
         
     });
 })
@@ -86,17 +95,21 @@ digitBtns.forEach((digitBtn) => {
 const operatorBtns = document.querySelectorAll(".operator")
 operatorBtns.forEach((operatorBtn) => {
     operatorBtn.addEventListener("click", (event) => {
+        //if we already inputted two numbers, evaluate the pair first and store the result in num1
         if (num1 != null && num2 != null){
             numBuilder = operate(num1, num2, operator)
             num1 = numBuilder
             num2 = null;
             updateDisplay();
         }
-        operator = event.target.textContent;
-        isCalculated = false;
-        numBuilder = ""; //reset the display for num2
-        negative = false; //reset the sign state for num2
-        updateMemoryDisplay();
+        //operator buttons do nothing if we did not already enter a number
+        if (num1 != null){
+            operator = event.target.textContent;
+            isCalculated = false;
+            numBuilder = ""; //reset the display for num2
+            negative = false; //reset the sign state for num2
+            updateMemoryDisplay();
+        }
     }
 )
 })
@@ -157,9 +170,9 @@ clearEntryBtn.addEventListener("click", ()=>{
     }
  } )
 
- const signButton = document.querySelector(".sign");
+ const signBtn = document.querySelector(".sign");
  let negative = false;
- signButton.addEventListener("click", () => {
+ signBtn.addEventListener("click", () => {
     if (!negative){
         numBuilder = "-" + numBuilder;
         negative = true;
@@ -182,10 +195,52 @@ clearEntryBtn.addEventListener("click", ()=>{
         mainDisplay.textContent = "-" + DEFAULT_DISPLAY;
     }
     else if (numBuilder === ""){
-        console.log("print")
         mainDisplay.textContent = DEFAULT_DISPLAY;
     }
  })
+
+const decimalBtn = document.querySelector(".decimal")
+decimalBtn.addEventListener("click", () => {
+    // do not want multiple decimal points in a number
+    if (!numBuilder.includes(".")){
+        if (numBuilder === ""){
+            numBuilder = "0."
+        }
+        else {
+            numBuilder += "."
+            // if we don't add a number after the decimal point, default it to .0
+            if (operator === ""){
+                num1 = Number(numBuilder + "0")
+            }
+            else {
+                num2 = Number(numBuilder + "0")
+            }
+        }
+        updateDisplay();
+        updateMemoryDisplay();
+    }
+})
+
+
+const percentBtn = document.querySelector(".percent")
+percentBtn.addEventListener("click", () => {
+    if (numBuilder != ""){
+        numBuilder = String(Number(numBuilder) / 100)
+        console.log(numBuilder)
+    }
+    if (operator === ""){
+        num1 = numBuilder.length > 0? Number(numBuilder) : null;
+    }
+    else{
+        num2 = numBuilder.length > 0? Number(numBuilder) : null;
+    }
+    updateDisplay();
+    updateMemoryDisplay();
+    if (mainDisplay.textContent == ""){
+        mainDisplay.textContent = DEFAULT_DISPLAY;
+    }
+})
+
 
 
 
