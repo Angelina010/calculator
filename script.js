@@ -103,14 +103,14 @@ operatorBtns.forEach((operatorBtn) => {
 
 const equalsBtn = document.querySelector(".equals")
 equalsBtn.addEventListener("click", () => {
-    if (operator != ""){
+    if (num1 != null && num2 != null){
         curDisplay = operate(num1, num2, operator);
+        num1 = Number(curDisplay);
+        num2 = null;
+        operator = "";
+        isCalculated = true;
+        updateDisplay();
+        updateMemoryDisplay();
     }
-    num1 = Number(curDisplay);
-    num2 = null;
-    operator = "";
-    isCalculated = true;
-    updateDisplay();
-    updateMemoryDisplay();
 })
 
