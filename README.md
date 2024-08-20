@@ -24,7 +24,7 @@ You can view a live preview of the project [here](https://angelina010.github.io/
 
 ## Screenshot
 
-<div style="display: flex; gap: 20px;">
-  <img src="images/calculatorScreenshot.png" alt="Calculator Screenshot">
-  <img src="images/calculatorDarkScreenshot.png" alt="Calculator Dark Mode Screenshot">
+<div style="display: flex; gap: 15px;">
+  <img src="images/calculatorScreenshot.png" alt="Calculator Screenshot" style="width: 45%;">
+  <img src="images/calculatorDarkScreenshot.png" alt="Calculator Dark Mode Screenshot" style="width: 45%;">
 </div>
