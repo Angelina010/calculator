@@ -149,6 +149,7 @@ allClearBtn.addEventListener("click", () => {
     operator = "";
     numBuilder = "";
     isCalculated = false;
+    negative = false;
     mainDisplay.textContent = DEFAULT_DISPLAY;
     updateMemoryDisplay();
 })

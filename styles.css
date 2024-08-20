@@ -14,16 +14,19 @@ body {
 
 .calculator {
     background-color: white;
-    border-radius: 5%;
-    padding : 16px 8px;
+    border-radius: 16px;
+    padding : 16px;
     box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
 }
 
 .display {
     text-align: right;
     font-size: 32px;
-    margin-top: 8px;
-    margin-bottom : 8px;
+    margin-top: 16px;
+    margin-bottom : 16px;
+    padding : 8px;
+    background-color: rgb(255, 192, 201);
+    border-radius: 8px;
 }
 
 .memory {
@@ -38,15 +41,16 @@ button {
     border : none;
     font-size: 24px;
     transition: filter 0.2s ease; 
+    background-color: rgb(230, 230, 230);
 }
 
 .top-btn {
-    background-color: lavender;
+    background-color: rgb(214, 214, 252);
     font-size: 18px;
 }
 
 .operator, .equals {
-    background-color: lightpink;
+    background-color: rgb(255, 192, 201);
 }
 
 button:hover {
