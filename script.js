@@ -35,32 +35,38 @@ function updateDisplay(){
     if (numBuilder.includes(".") && numBuilder.length < 10) {
         // If numBuilder ends with a decimal point, show it as is without conversion
         mainDisplay.textContent = numBuilder;
-    } else if (numBuilder.length < 10) {
-        mainDisplay.textContent = Number(numBuilder).toLocaleString();
-    }
+    } 
     else{
-        scientificNotation = Number(numBuilder).toExponential()
-        mainDisplay.textContent = scientificNotation.length < 10? scientificNotation : Number(scientificNotation).toPrecision(7)
+       mainDisplay.textContent = formatNumber(Number(numBuilder));
     }
     
+}
+
+function formatNumber(num) {
+    // If the number is very small, but zero, converting it to a String sometimes changes the number to a 0.
+    //Therefore, we handle this case by returning it in scientific notation to avoid this. 
+    if (num !== 0 && Math.abs(num) < 0.000001) {
+        return num.toExponential();
+    }
+
+    if (String(num).length < 10) {
+        return num.toLocaleString();
+    } else {
+        let scientificNotation = num.toExponential();
+        return scientificNotation.length < 10 ? scientificNotation : num.toPrecision(7);
+    }
 }
 
 function updateMemoryDisplay(){
     let memoryDisplayText = ""
     if (num1 != null) {
-        if (String(num1).length < 10){
-            memoryDisplayText += num1.toLocaleString() + " "
-        }
-        else{
-            scientificNotation = num1.toExponential()
-            memoryDisplayText = scientificNotation.length < 10? scientificNotation + " ": Number(scientificNotation).toPrecision(7) + " "
-        }
+        memoryDisplayText += formatNumber(num1) + " ";
     }
     if (operator != "") {
-        memoryDisplayText += operator + " "
+        memoryDisplayText += operator + " ";
     }
     if (num2 != null) {
-        memoryDisplayText += num2.toLocaleString() + " "
+        memoryDisplayText += formatNumber(num2) + " ";
     }
     memoryDisplay.textContent = memoryDisplayText;
 }
