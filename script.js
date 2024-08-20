@@ -33,7 +33,7 @@ function operate (num1, num2, operator){
 
 function updateDisplay(){
     if (numBuilder.length < 10){
-        mainDisplay.textContent = numBuilder
+        mainDisplay.textContent = Number(numBuilder).toLocaleString();
     }
     else{
         scientificNotation = Number(numBuilder).toExponential()
@@ -45,13 +45,13 @@ function updateDisplay(){
 function updateMemoryDisplay(){
     let memoryDisplayText = ""
     if (num1 != null) {
-        memoryDisplayText += num1 + " "
+        memoryDisplayText += num1.toLocaleString() + " "
     }
     if (operator != "") {
         memoryDisplayText += operator + " "
     }
     if (num2 != null) {
-        memoryDisplayText += num2 + " "
+        memoryDisplayText += num2.toLocaleString() + " "
     }
     memoryDisplay.textContent = memoryDisplayText;
 }
@@ -145,19 +145,23 @@ clearEntryBtn.addEventListener("click", ()=>{
 
     if (operator === ""){
         //if a number isCalculated, clicking the CE button removes the entire number instead of one digit at a time
-        if (numBuilder.length === 0 || isCalculated){
+        if (numBuilder.length === 0 || isCalculated || numBuilder === "-"){
             num1 = null
+            numBuilder = "";
+            negative = false;
         }
         else{
             num1 = Number(numBuilder);
         }
-
-        if (isCalculated){
-            numBuilder = "";
-        }
     }
     else if (num2 != null){
-        num2 = numBuilder.length > 0? Number(numBuilder) : null;
+        if (num2.length === 0 || numBuilder === "-"){
+            num2 = null
+            numBuilder = ""
+        }
+        else{
+            num2 = Number(numBuilder)
+        }
     }
     else{
         operator = "";
