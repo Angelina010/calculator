@@ -11,19 +11,19 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
-    return num2 === 0 ? "Error: Division by 0" : num1 / num2
+    return num2 === 0 ? "Error: Division by 0" : num1 / num2;
 }
 
 function operate(num1, num2, operator) {
     switch (operator) {
         case '+':
-            return add(num1, num2)
+            return add(num1, num2);
         case '−':
-            return subtract(num1, num2)
+            return subtract(num1, num2);
         case '×':
-            return multiply(num1, num2)
+            return multiply(num1, num2);
         case '÷':
-            return divide(num1, num2)
+            return divide(num1, num2);
         default:
             return "Error: Invalid operator";
     }
@@ -69,7 +69,13 @@ function updateMemoryDisplay() {
     memoryDisplay.textContent = memoryDisplayText;
 }
 
-function updateDisplays(){
+function resetMainDisplayIfEmpty() {
+    if (mainDisplay.textContent === "") {
+        mainDisplay.textContent = DEFAULT_DISPLAY;
+    }
+}
+
+function updateDisplays() {
     updateMainDisplay();
     updateMemoryDisplay();
 }
@@ -85,7 +91,7 @@ let isCalculated = false;
 
 const DEFAULT_DISPLAY = 0;
 const mainDisplay = document.querySelector(".display");
-const memoryDisplay = document.querySelector(".memory")
+const memoryDisplay = document.querySelector(".memory");
 
 const digitBtns = document.querySelectorAll(".digit");
 digitBtns.forEach((digitBtn) => {
@@ -110,8 +116,8 @@ operatorBtns.forEach((operatorBtn) => {
     operatorBtn.addEventListener("click", (event) => {
         //if we already inputted two numbers, evaluate the pair first and store the result in num1
         if (num1 != null && num2 != null) {
-            numBuilder = operate(num1, num2, operator)
-            num1 = numBuilder
+            num1 = operate(num1, num2, operator);
+            numBuilder = String(num1);
             num2 = null;
             updateMainDisplay();
         }
@@ -132,13 +138,13 @@ operatorBtns.forEach((operatorBtn) => {
 const equalsBtn = document.querySelector(".equals")
 equalsBtn.addEventListener("click", () => {
     if (num1 != null && num2 != null) {
-        num1 = operate(num1, num2, operator)
-        numBuilder = String(num1);
+        num1 = operate(num1, num2, operator);
         num2 = null;
+        numBuilder = String(num1);
         operator = "";
         isCalculated = true;
         updateMainDisplay();
-        memoryDisplay.textContent += "="
+        memoryDisplay.textContent += "=";
     }
 })
 
@@ -157,11 +163,11 @@ allClearBtn.addEventListener("click", () => {
 const clearEntryBtn = document.querySelector(".clear-entry")
 clearEntryBtn.addEventListener("click", () => {
     numBuilder = numBuilder.slice(0, -1);
-
+    //3 cases: removing a digit off of num1, a digit off of num2, and removing the operator
     if (operator === "") {
         //if a number isCalculated, clicking the CE button removes the entire number instead of one digit at a time
         if (numBuilder.length === 0 || isCalculated || numBuilder === "-") {
-            num1 = null
+            num1 = null;
             numBuilder = "";
             negative = false;
         }
@@ -171,11 +177,11 @@ clearEntryBtn.addEventListener("click", () => {
     }
     else if (num2 != null) {
         if (numBuilder.length === 0 || numBuilder === "-") {
-            num2 = null
-            numBuilder = ""
+            num2 = null;
+            numBuilder = "";
         }
         else {
-            num2 = Number(numBuilder)
+            num2 = Number(numBuilder);
         }
     }
     else {
@@ -183,9 +189,7 @@ clearEntryBtn.addEventListener("click", () => {
     }
 
     updateDisplays();
-    if (mainDisplay.textContent === "") {
-        mainDisplay.textContent = DEFAULT_DISPLAY;
-    }
+    resetMainDisplayIfEmpty();
 })
 
 const signBtn = document.querySelector(".sign");
@@ -196,24 +200,22 @@ signBtn.addEventListener("click", () => {
         negative = true;
     }
     else {
-        numBuilder = numBuilder.substring(1, numBuilder.length); //removing the - sign
+        //removing the - sign
+        numBuilder = numBuilder.substring(1);
         negative = false;
     }
     if (num2 != null) {
         //using num2 * -1 instead of num2 = -num2 because the latter shows as NaN if num2 is a negative number in scientific notation
-        num2 = num2 * -1
+        num2 = num2 * -1;
     }
-    else {
-        if (num1 != null) {
-            num1 = num1 * -1
-        }
+    else if (num1 != null) {
+        num1 = num1 * -1;
+
     }
     updateDisplays();
+    resetMainDisplayIfEmpty();
     if (numBuilder === "-") {
         mainDisplay.textContent = "-" + DEFAULT_DISPLAY;
-    }
-    else if (numBuilder === "") {
-        mainDisplay.textContent = DEFAULT_DISPLAY;
     }
 })
 
@@ -222,16 +224,19 @@ decimalBtn.addEventListener("click", () => {
     // do not want multiple decimal points in a number
     if (!numBuilder.includes(".")) {
         if (numBuilder === "") {
-            numBuilder = "0."
+            numBuilder = "0.";
+        }
+        else if (numBuilder === "-") {
+            numBuilder = "-0.";
         }
         else {
             numBuilder += "."
             // if we don't add a number after the decimal point, default it to .0
             if (operator === "") {
-                num1 = Number(numBuilder + "0")
+                num1 = Number(numBuilder + "0");
             }
             else {
-                num2 = Number(numBuilder + "0")
+                num2 = Number(numBuilder + "0");
             }
         }
         updateDisplays();
@@ -250,9 +255,7 @@ percentBtn.addEventListener("click", () => {
         num2 = numBuilder.length > 0 ? Number(numBuilder) : null;
     }
     updateDisplays();
-    if (mainDisplay.textContent == "") {
-        mainDisplay.textContent = DEFAULT_DISPLAY;
-    }
+    resetMainDisplayIfEmpty();
 })
 
 
