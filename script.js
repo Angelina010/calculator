@@ -258,6 +258,26 @@ percentBtn.addEventListener("click", () => {
     resetMainDisplayIfEmpty();
 })
 
+const darkModeBtn = document.querySelector(".dark-mode");
+const body = document.querySelector("body");
+const calculator = document.querySelector(".calculator");
+const buttons = document.querySelectorAll("button");
+darkModeBtn.addEventListener("click", ()=>{
+    body.classList.toggle("dark-mode");
+    calculator.classList.toggle("dark-mode");
+    buttons.forEach((btn) => {
+        btn.classList.toggle("dark-mode");
+    })
+    mainDisplay.classList.toggle("dark-mode");
 
+    if (body.classList.contains("dark-mode")){
+        darkModeBtn.src = "images/lightModeIcon.svg";
+        darkModeBtn.alt = "Light Mode Icon";
+    }
+    else{
+        darkModeBtn.src = "images/darkModeIcon.svg";
+        darkModeBtn.alt = "Dark Mode Icon";
+    }
+})
 
 
