@@ -32,7 +32,10 @@ function operate (num1, num2, operator){
 }
 
 function updateDisplay(){
-    if (numBuilder.length < 10){
+    if (numBuilder.includes(".") && numBuilder.length < 10) {
+        // If numBuilder ends with a decimal point, show it as is without conversion
+        mainDisplay.textContent = numBuilder;
+    } else if (numBuilder.length < 10) {
         mainDisplay.textContent = Number(numBuilder).toLocaleString();
     }
     else{
@@ -45,7 +48,13 @@ function updateDisplay(){
 function updateMemoryDisplay(){
     let memoryDisplayText = ""
     if (num1 != null) {
-        memoryDisplayText += num1.toLocaleString() + " "
+        if (String(num1).length < 10){
+            memoryDisplayText += num1.toLocaleString() + " "
+        }
+        else{
+            scientificNotation = num1.toExponential()
+            memoryDisplayText = scientificNotation.length < 10? scientificNotation + " ": Number(scientificNotation).toPrecision(7) + " "
+        }
     }
     if (operator != "") {
         memoryDisplayText += operator + " "
@@ -155,7 +164,7 @@ clearEntryBtn.addEventListener("click", ()=>{
         }
     }
     else if (num2 != null){
-        if (num2.length === 0 || numBuilder === "-"){
+        if (numBuilder.length === 0 || numBuilder === "-"){
             num2 = null
             numBuilder = ""
         }
