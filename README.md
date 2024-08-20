@@ -22,9 +22,9 @@ A calculator that performs arithmetic operations.
 
 You can view a live preview of the project [here](https://angelina010.github.io/calculator/).
 
-## Screenshot
+## Screenshots
 
-<div style="display: flex; gap: 15px;">
+<div style="display: flex; gap: 30px;">
   <img src="images/calculatorScreenshot.png" alt="Calculator Screenshot" style="width: 45%;">
   <img src="images/calculatorDarkScreenshot.png" alt="Calculator Dark Mode Screenshot" style="width: 45%;">
 </div>
